@@ -58,6 +58,7 @@ app.intent('pick_kitten', (conv, params, option) => {
     )
 });
 
+// Triggered by "check transaction with action payment"
 app.intent('transaction_check_action', (conv) => {
     return conv.ask(getTransactionCheck(conv));
 });
@@ -81,10 +82,13 @@ function getPaymentOptions () {
     }
 }
 
+// Theorically triggered by "check transaction with Google payment"
+// But the training phrases has not been yet added to the Dialog Flow
 app.intent('transaction_check_google', (conv) => {
     conv.ask(`Not for today. Try saying "check transaction with action payment".`);
 });
 
+// Automatically triggered by the TransactionRequirements template
 app.intent('transaction_check_complete', (conv) => {
     const arg = conv.arguments.get('TRANSACTION_REQUIREMENTS_CHECK_RESULT');
     if (arg && arg.resultType ==='OK') {
@@ -95,6 +99,7 @@ app.intent('transaction_check_complete', (conv) => {
     }
 });
 
+// Triggered by "confirm transaction"
 app.intent('transaction_decision_action', (conv) => {
     const orderId = getOrderId()
     conv.data.orderId = orderId
@@ -177,6 +182,7 @@ app.intent('transaction_decision_action', (conv) => {
     }));
   });
 
+  // Automatically triggered after the user took a decision about transaction
   app.intent('transaction_decision_complete', (conv) => {
     console.log('Transaction decision complete');
     const arg = conv.arguments.get('TRANSACTION_DECISION_VALUE');
